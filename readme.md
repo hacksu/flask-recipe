@@ -4,15 +4,15 @@ This will be a recipe in two parts. First a simple server to store and list reci
 
 ## Flask
 
-Flask is a minimalistic library to programtically respond to HTTP requests in Python.
+Flask is a minimalistic library to programmatically respond to HTTP requests in Python.
 It isn't the only option for this. If you prefer JavaScript, Node.js has a popular library called Express. 
 If you need a more complete, though more complicated, solution in Python Django does everything Flask does along with managing a database
 with features like an auto generated admin interface.
 
 ## HTTP
 
-HTTP is how a lot of the web comunicates. Each request consistes of a url (domain name, and path) a, method used to identify the rquest,
-often a body containing exra information, and a list of headers (a list of string fields with values)
+HTTP is how a lot of the web communicates. Each request consists of a url (domain name, and path) a, method used to identify the rquest,
+often a body containing extra information, and a list of headers (a list of string fields with values)
 
 ## HTTP Methods
 
@@ -107,9 +107,9 @@ Python is a scripting language and like many we don't actually need to make a fi
 * Open your command prompt and cd into the src folder: `cd src`
 * Launch python: `python`
 * Import the file we made: `import db`
-* Creat an instance of a recipe: `cookies = db.Recipe(name="Chocolate", category="Cookies")`
+* Create an instance of a recipe: `cookies = db.Recipe(name="Chocolate", category="Cookies")`
 * Save the cookie: `cookies.save()`
-* You might notice that it prents one. This means everything went well and is because python when run in this mode
+* You might notice that it prints one. This means everything went well and is because python when run in this mode
 prints the value of every expression
 * If you want to add a few more feel free.
 * We can list these by typing `db.Recipe.select().where(db.Recipe.name=="Cookies")`, but we'll get something weird
@@ -120,4 +120,14 @@ prints the value of every expression
 * To exit we can press `control-d` or type `exit()`
 
 ### Use it
+
+Lets actually save something given us by the user. We'll talk about a lot so get ready
+
+* Open the app.py file back up
+* Again we're going to copy an existing route and modify it
+* Set the route to `/recipe` and we also need to set the method to POST: `@app.route("/recipe", methods=["POST"])`
+* Change the function to be named something like `add_recipe`: `def add_recipe():`
+* At the top of the file import `Recipe`: `from db import Recipe`
+* Also import `request` from `flask` so we can get info about the current request like the JSON they send: `from flask import Flask, jsonify, request`
+* 
 
