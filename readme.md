@@ -119,7 +119,7 @@ prints the value of every expression
 `db.Recipe.delete().where(db.Recipe.name=="Chocolate").execute()`
 * To exit we can press `control-d` or type `exit()`
 
-### Use it
+### Post it
 
 Lets actually save something given us by the user. We'll talk about a lot so get ready
 
@@ -129,5 +129,43 @@ Lets actually save something given us by the user. We'll talk about a lot so get
 * Change the function to be named something like `add_recipe`: `def add_recipe():`
 * At the top of the file import `Recipe`: `from db import Recipe`
 * Also import `request` from `flask` so we can get info about the current request like the JSON they send: `from flask import Flask, jsonify, request`
-* 
+* Before we go any farther try loading `http://localhost:5000/recipe`. You should get an error. Something like this method not allowed
+this is because browsers always make `GET` requests and we're only listening for `POST`
+* Go to `https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en` or what's easier,
+ search for `postman chrome`
+* If you don't have Chrome installed try downloading the application version of it
+* You should be able to launch it by clicking `Apps` then `Postman`
+* Put `http://127.0.0.1:5000/recipe` in the URL and change the method to `POST`
+* Click send and you should see normal JSON (though more nicely formated)
+* Lets send some JSON.
+* Click the body tab on the top section enter some JSON like
+
+        {
+            "name": "Doughnuts",
+            "category": "Dessert" 
+        }
+* If we send it now we won't actually see anything different so add to our route handler: `print(request.get_JSON())`
+* Not much has changed but if we look in the console we'll see the same JSON printed
+* It's not actually the exact same though, it's been parsed into a dictionary
+* We can use values in the dictionary to make a new Recipe
+* Save the json: `json = request.get_json()`
+* Make a new recipe: `recipe = Recipe(name=json["name"], category=json["category"])`
+* Save that: `recipe.save()`
+* Finally lets give some indication that we saved something. Let's return the id of the newly created object.
+* Now every time we post something to it we save a new recipe.
+
+### Show the recipes we've saved
+
+We need to actually show the recipes. I've found the easiest way to do this is to add a method to our Recipe class.
+
+* Open up `db.py`
+* Add the first line of our method: `def to_dictionary(self):`
+* The `self` will be a reference to the class
+* After that add an ident and return
+
+        return {
+            "name": self.name,
+            "category": self.category
+        }
+* This is the way to define a dictionary in python. It might look like JSON and infact it is very close but it isn't.
 
