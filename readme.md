@@ -167,5 +167,19 @@ We need to actually show the recipes. I've found the easiest way to do this is t
             "name": self.name,
             "category": self.category
         }
-* This is the way to define a dictionary in python. It might look like JSON and infact it is very close but it isn't.
+* This is the way to define a Dictionary in python. It might look like JSON and infact it is very close but it isn't.
+* Now back in `app.py` lets copy the `add_recipe` route, but remove the methods field and change the name
+
+        @app.route("/recipe")
+        def get_recipes():
+            json = request.get_json()
+            recipe = Recipe(name=json["name"], category=json["category"])
+            recipe.save()
+            return jsonify({"id": recipe.id})
+
+* Obviously we need to change the actual contents too. Remember how we played around earlier. We can do the same thing here except we need to
+store the dictionaries for each recipe instead of printing their names
+* First create an list to store it in (python's expandable array): `recipes = []`
+* Next add the loop to find all the recipes: `for recipe in Recipe.select()`. We don't need a `where` here because we aren't filtering by anything
+* 
 

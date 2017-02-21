@@ -20,5 +20,13 @@ def add_recipe():
     recipe.save()
     return jsonify({"id": recipe.id})
 
+
+@app.route("/recipe")
+def get_recipes():
+    recipes = []
+    for recipe in Recipe.select():
+        recipes.append(recipe.to_dictionary())
+    return jsonify({"recipes": recipes})
+
 if __name__ == '__main__':
     app.run(debug=True)
