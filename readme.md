@@ -42,3 +42,15 @@ to send data in the body as part of POST request or similar
 * You should see hello world
 
 ## Project
+
+### jsonify
+
+Right now we're returning a string. This is fine for many cases. We could return an entire HTML website, but what is being done
+a lot now is building the entire frontend in JS and HTML and just sending the data to it as needed. It can make it easier to 
+implement mobile apps and similar. Flask will let us return JSON, which is a lot easier for other programs to use. We just need to make
+a few changes. 
+
+* Import `jsonify` so we can convert python dictionaries to JSON: `from flask import Flask, jsonify`
+* Return JSON from our hello world route. `return jsonify({"message": "hello world"})`
+* We don't need to restart the server (probably), because we started flask in debug mode it will reload when we change the file
+* Reload the URL and we should see JSON
