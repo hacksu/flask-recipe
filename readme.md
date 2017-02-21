@@ -54,3 +54,13 @@ a few changes.
 * Return JSON from our hello world route. `return jsonify({"message": "hello world"})`
 * We don't need to restart the server (probably), because we started flask in debug mode it will reload when we change the file
 * Reload the URL and we should see JSON
+
+
+### Another route
+
+Obviously a web server isn't very interesting if it can only return one thing. Lets add a route to tell us the time
+
+* To start just copy and paste the entire hello world route
+* We have to change the name of the function as we can't have two with the same name: `def get_time():`
+* We also should change where the route is mapped to: `@app.route("/time")`
+* Now lets change what it returns 
