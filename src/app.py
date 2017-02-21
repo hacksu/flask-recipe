@@ -28,5 +28,9 @@ def get_recipes():
         recipes.append(recipe.to_dictionary())
     return jsonify({"recipes": recipes})
 
+@app.route("/recipe/<int:id>", methods=["delete"])
+def delete_recipes(id):
+    return jsonify({"n": Recipe.delete().where(Recipe.id==id).execute()})
+
 if __name__ == '__main__':
     app.run(debug=True)

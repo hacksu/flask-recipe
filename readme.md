@@ -121,7 +121,7 @@ prints the value of every expression
 
 ### Post it
 
-Lets actually save something given us by the user. We'll talk about a lot so get ready
+Let's actually save something given us by the user. We'll talk about a lot so get ready
 
 * Open the app.py file back up
 * Again we're going to copy an existing route and modify it
@@ -151,7 +151,7 @@ this is because browsers always make `GET` requests and we're only listening for
 * Save the json: `json = request.get_json()`
 * Make a new recipe: `recipe = Recipe(name=json["name"], category=json["category"])`
 * Save that: `recipe.save()`
-* Finally lets give some indication that we saved something. Let's return the id of the newly created object.
+* Finally let's give some indication that we saved something. Let's return the id of the newly created object.
 * Now every time we post something to it we save a new recipe.
 
 ### Show the recipes we've saved
@@ -161,7 +161,7 @@ We need to actually show the recipes. I've found the easiest way to do this is t
 * Open up `db.py`
 * Add the first line of our method: `def to_dictionary(self):`
 * The `self` will be a reference to the class
-* After that add an ident and return
+* After that add an indent and return
 
         return {
             "name": self.name,
@@ -181,5 +181,15 @@ We need to actually show the recipes. I've found the easiest way to do this is t
 store the dictionaries for each recipe instead of printing their names
 * First create an list to store it in (python's expandable array): `recipes = []`
 * Next add the loop to find all the recipes: `for recipe in Recipe.select()`. We don't need a `where` here because we aren't filtering by anything
-* 
+* Inside the loop call the append method on `recipes` to add each recipe's 
+dictionary representation: `recipes.append(recipe.to_dictionary())`
+* Finaly last but not least jsonify the whole thing and return it: `return jsonify({"recipes": recipes})`
+
+### Delete the bad
+
+There's one more thing we can't do right now. Delete old recipes
+
+        @app.route("/recipe/<int:id>", methods=["delete"])
+        def delete_recipes(id):
+            return jsonify({"n": Recipe.delete().where(Recipe.id==id).execute()})
 
