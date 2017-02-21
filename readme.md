@@ -63,4 +63,15 @@ Obviously a web server isn't very interesting if it can only return one thing. L
 * To start just copy and paste the entire hello world route
 * We have to change the name of the function as we can't have two with the same name: `def get_time():`
 * We also should change where the route is mapped to: `@app.route("/time")`
-* Now lets change what it returns 
+* Now lets change what it returns: `return jsonify({"time": 0})`
+* Load `http://localhost:5000/time` and we should see the result.
+* Of couse we can still load `http://localhost:5000/` to see the old route
+
+### Return useful things
+
+Right now we aren't returning the actual time. Let's do that. Here time is unix time
+
+* First we need to immport `time`: `import time`
+* `time.time()` gives us a double corresponding to the [unix time](https://en.wikipedia.org/wiki/Unix_time)
+* We can just replace `0` in the JSON with it: `return jsonify({"time": time.time()})`
+* We can also round down to an int by using `int()` to convert `return jsonify({"time": int(time.time())})`
