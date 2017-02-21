@@ -9,6 +9,7 @@ class BaseModel(Model):
 class Recipe(BaseModel):
     name = CharField()
     category = CharField()
-    
 
+
+db.create_table(Recipe, safe=True)
 db.connect()

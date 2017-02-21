@@ -98,8 +98,26 @@ and many more. Each has benefits and problems.
             name = CharField()
             category = CharField()
 
-* Obviously there might be some problems with this model
+* We need to tell Peewee to create a table for this class: `db.create_table(Recipe, safe=True)`
 
 ### Test it
 
-Python is a scripting language and like many we don't actually need to make a file to test it. Lets quickly check that our 
+Python is a scripting language and like many we don't actually need to make a file to test it. Lets quickly check that our DB model is working
+
+* Open your command prompt and cd into the src folder: `cd src`
+* Launch python: `python`
+* Import the file we made: `import db`
+* Creat an instance of a recipe: `cookies = db.Recipe(name="Chocolate", category="Cookies")`
+* Save the cookie: `cookies.save()`
+* You might notice that it prents one. This means everything went well and is because python when run in this mode
+prints the value of every expression
+* If you want to add a few more feel free.
+* We can list these by typing `db.Recipe.select().where(db.Recipe.name=="Cookies")`, but we'll get something weird
+* Instead to actually list features of each we have to use a loop: `for cookie in db.Recipe.select().where(db.Recipe.name=="Chocolate"):`
+* Press enter and we'll see a some funny dots. Press tab to indent a line and type `print(cookie.name)` then enter twice
+* Deleting items works similarly only we use delete instead of select and we must call execute on the result like: 
+`db.Recipe.delete().where(db.Recipe.name=="Chocolate").execute()`
+* To exit we can press `control-d` or type `exit()`
+
+### Use it
+
