@@ -75,3 +75,31 @@ Right now we aren't returning the actual time. Let's do that. Here time is unix 
 * `time.time()` gives us a double corresponding to the [unix time](https://en.wikipedia.org/wiki/Unix_time)
 * We can just replace `0` in the JSON with it: `return jsonify({"time": time.time()})`
 * We can also round down to an int by using `int()` to convert `return jsonify({"time": int(time.time())})`
+
+### Recipes
+
+What we have now is well and good, but it would be nice to be able to save data. Doing that will expose all sorts of different options.
+To actually store the data I'll be using a library called `Peewee`. There are a lot of other options including raw `SQL`, `MongoDB`, `Redix` 
+and many more. Each has benefits and problems.
+
+* First we need to install `Peewee`: `pip install peewee`
+* Next lets add a new file to the `src` folder. Name it `db.py`
+* First we are going to import `Peewee` We're lazy so we're just importing everything in it: `from peewee import *`
+* Now we need to reference a `SQL` db. More choices here, but we're going to make the lazy one again: `db = SqliteDatabase('recipe.db')`
+* We're going to create an entire class to be the base for everything else
+
+        class BaseModel(Model):
+            class Meta:
+                database = db
+
+* Finally lets add a class to represent our data
+
+        class Recipe(BaseModel):
+            name = CharField()
+            category = CharField()
+
+* Obviously there might be some problems with this model
+
+### Test it
+
+Python is a scripting language and like many we don't actually need to make a file to test it. Lets quickly check that our 
