@@ -36,8 +36,11 @@ to send data in the body as part of POST request or similar
 * Open command prompt, Powershell, similar.
 * Run: `pip install flask flask_cors`
 * CD into into the directory you downloaded
- * example: `cd Downloads/flask-recipe`
-* Run the server: `python src/app.py`
+* example: `cd Downloads/flask-recipe`
+* Set the environment variables:
+    * `export FLASK_APP=src/app.py`
+    * `export FLASK_ENV=development`
+* Run the server: `flask run`
 * Open `http://localhost:5000/`
 * You should see hello world
 
