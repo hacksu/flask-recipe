@@ -39,19 +39,19 @@ to send data in the body as part of POST request or similar
 * Inside the src folder, create a file named `app.py`
 * Paste:
 
-                from flask import Flask, jsonify, request, render_template, redirect
-                import time
-                from db import Recipe
+      from flask import Flask, jsonify, request, render_template, redirect
+      import time
+      from db import Recipe
 
-                app = Flask(__name__) # Create the server object
+      app = Flask(__name__) # Create the server object
 
 
-                @app.route("/")
-                def hello_world():
-                    return jsonify({"message": "hello world"})
-                
-                if __name__ == '__main__':
-                    app.run(debug=True)
+      @app.route("/")
+      def hello_world():
+          return jsonify({"message": "hello world"})
+
+      if __name__ == '__main__':
+          app.run(debug=True)
 
 * Run the server: `python src/app.py`
 * Open `http://localhost:5000/`
