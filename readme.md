@@ -32,15 +32,11 @@ to send data in the body as part of POST request or similar
 ## Setup
 
 * Install Python: https://www.python.org/
-* Download starter project: https://github.com/hacksu/flask-recipe
 * Open command prompt, Powershell, similar.
-* Run: `pip install flask flask_cors`
+* Run: `pip install flask flask_cors peewee`
 * CD into into the directory you downloaded
 * example: `cd Downloads/flask-recipe`
-* Set the environment variables:
-    * `export FLASK_APP=src/app.py`
-    * `export FLASK_ENV=development`
-* Run the server: `flask run`
+* Run the server: `python src/app.py`
 * Open `http://localhost:5000/`
 * You should see hello world
 
@@ -85,7 +81,6 @@ What we have now is well and good, but it would be nice to be able to save data.
 To actually store the data I'll be using a library called `Peewee`. There are a lot of other options including raw `SQL`, `MongoDB`, `Redix` 
 and many more. Each has benefits and problems.
 
-* First we need to install `Peewee`: `pip install peewee`
 * Next lets add a new file to the `src` folder. Name it `db.py`
 * First we are going to import `Peewee` We're lazy so we're just importing everything in it: `from peewee import *`
 * Now we need to reference a `SQL` db. More choices here, but we're going to make the lazy one again: `db = SqliteDatabase('recipe.db')`
@@ -101,7 +96,7 @@ and many more. Each has benefits and problems.
             name = CharField()
             category = CharField()
 
-* We need to tell Peewee to create a table for this class: `db.create_table(Recipe, safe=True)`
+* We need to tell Peewee to create a table for this class: `db.create_tables([Recipe], safe=True)`
 
 ### Test it
 
@@ -120,41 +115,22 @@ prints the value of every expression
 * Press enter and we'll see a some funny dots. Press tab to indent a line and type `print(cookie.name)` then enter twice
 * Deleting items works similarly only we use delete instead of select and we must call execute on the result like: 
 `db.Recipe.delete().where(db.Recipe.name=="Chocolate").execute()`
-* To exit we can press `control-d` or type `exit()`
+* To exit we can press `exit()`
 
 ### Post it
 
 Let's actually save something given us by the user. We'll talk about a lot so get ready
 
-* Open the app.py file back up
+* Open the app.py file back upchan
 * Again we're going to copy an existing route and modify it
 * Set the route to `/recipe` and we also need to set the method to POST: `@app.route("/recipe", methods=["POST"])`
 * Change the function to be named something like `add_recipe`: `def add_recipe():`
 * At the top of the file import `Recipe`: `from db import Recipe`
-* Also import `request` from `flask` so we can get info about the current request like the JSON they send: `from flask import Flask, jsonify, request`
+* Also import `request` from `flask` so we can get info about the current request like the JSON they send: `from flask import Flask, jsonify, request, render_template, redirect`
 * Before we go any farther try loading `http://localhost:5000/recipe`. You should get an error. Something like this method not allowed
 this is because browsers always make `GET` requests and we're only listening for `POST`
-* Go to `https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en` or what's easier,
- search for `postman chrome`
-* If you don't have Chrome installed try downloading the application version of it
-* You should be able to launch it by clicking `Apps` then `Postman`
-* Put `http://127.0.0.1:5000/recipe` in the URL and change the method to `POST`
-* Click send and you should see normal JSON (though more nicely formated)
-* Lets send some JSON.
-* Click the body tab on the top section enter some JSON like
-
-        {
-            "name": "Doughnuts",
-            "category": "Dessert" 
-        }
-* If we send it now we won't actually see anything different so add to our route handler: `print(request.get_JSON())`
-* Not much has changed but if we look in the console we'll see the same JSON printed
-* It's not actually the exact same though, it's been parsed into a dictionary
-* We can use values in the dictionary to make a new Recipe
-* Save the json: `json = request.get_json()`
 * Make a new recipe: `recipe = Recipe(name=json["name"], category=json["category"])`
 * Save that: `recipe.save()`
-* Finally let's give some indication that we saved something. Let's return the id of the newly created object.
 * Now every time we post something to it we save a new recipe.
 
 ### Show the recipes we've saved
@@ -167,6 +143,7 @@ We need to actually show the recipes. I've found the easiest way to do this is t
 * After that add an indent and return
 
         return {
+            "id": self.id,
             "name": self.name,
             "category": self.category
         }
@@ -175,10 +152,11 @@ We need to actually show the recipes. I've found the easiest way to do this is t
 
         @app.route("/recipe")
         def get_recipes():
-            json = request.get_json()
-            recipe = Recipe(name=json["name"], category=json["category"])
+            recipes = []
+            for recipe in Recipe.select():
+                recipes.append(recipe.to_dictionary())
             recipe.save()
-            return jsonify({"id": recipe.id})
+            return render_template('recipes.html', recipes=recipes)
 
 * Obviously we need to change the actual contents too. Remember how we played around earlier. We can do the same thing here except we need to
 store the dictionaries for each recipe instead of printing their names
@@ -192,7 +170,8 @@ dictionary representation: `recipes.append(recipe.to_dictionary())`
 
 There's one more thing we can't do right now. Delete old recipes
 
-        @app.route("/recipe/<int:id>", methods=["delete"])
-        def delete_recipes(id):
-            return jsonify({"n": Recipe.delete().where(Recipe.id==id).execute()})
+      @app.route("/recipe/delete/<int:id>")
+      def delete_recipes(id):
+          jsonify({"n": Recipe.delete().where(Recipe.id==id).execute()})
+          return redirect('/recipe')
 
