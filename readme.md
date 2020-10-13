@@ -146,8 +146,9 @@ Let's actually save something given us by the user. We'll talk about a lot so ge
 * Also import `request` from `flask` so we can get info about the current request like the JSON they send: `from flask import Flask, jsonify, request, render_template, redirect`
 * Before we go any farther try loading `http://localhost:5000/recipe`. You should get an error. Something like this method not allowed
 this is because browsers always make `GET` requests and we're only listening for `POST`
-* Make a new recipe: `recipe = Recipe(name=json["name"], category=json["category"])`
+* Make a new recipe: `recipe = Recipe(name=request.form["name"], category=request.form["category"])`
 * Save that: `recipe.save()`
+* Bring us back to the main page: `return redirect('/recipe')`
 * Now every time we post something to it we save a new recipe.
 
 ### Show the recipes we've saved
