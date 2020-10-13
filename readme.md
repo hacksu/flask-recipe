@@ -35,7 +35,7 @@ to send data in the body as part of POST request or similar
 * Create a folder for this project
 * Open command prompt, Powershell, similar.
 * Navigate to the folder you created and run: `mkdir src`
-* Run: `pip install flask flask_cors peewee`
+* Run: `pip install flask peewee`
 * Inside the src folder, create a file named `app.py`
 * Paste:
 
